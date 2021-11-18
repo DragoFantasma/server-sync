@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 public class Launcher {
 
@@ -34,13 +35,24 @@ public class Launcher {
         return length;
     }
 
+    public static String getDefaultMinecraftDirectory() {
+        String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
+        
+        if (osName.contains("windows")) {
+            return "%appdata%/.minecraft/mods";
+        } else if (osName.contains("linux")) {
+            return "/home/sthat/downloaded_mods/";
+        }
+
+        throw new RuntimeException("Operating System is not supported");
+    }
+
     public static void main(String[] args) throws Exception {
 
         boolean clearModsFolder = findArguments(args, "--clear-mods-folder");
         boolean updateAll = findArguments(args, "--update-all");
 
-        //String modsFolder = args.length < 1 ? "%appdata%/.minecraft/mods" : args[1];
-        String modsFolder = args.length < 1 ? "/home/sthat/downloaded_mods/" : args[1];
+        String modsFolder = args.length < 1 ? getDefaultMinecraftDirectory() : args[1];
         System.out.println("Mods folder: " + modsFolder);
 
         File targetDirectory = new File(modsFolder);
