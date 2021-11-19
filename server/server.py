@@ -4,7 +4,7 @@ from threading import Thread
 import os
 import sys
 
-if len(sys.argv) < 1:
+if len(sys.argv) < 2:
     print("Please type the server folder")
     sys.exit(1)
 
@@ -91,10 +91,10 @@ def wait_connection(s):
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-    s.bind(('localhost', port))
+    s.bind(('0.0.0.0', port))
     s.listen(1)
 
-    print(f"Started server on localhost:{port}")
+    print(f"Started server on *:{port}")
 
     while True:
         wait_connection(s)
