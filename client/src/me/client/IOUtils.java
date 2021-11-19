@@ -23,7 +23,8 @@ public class IOUtils {
     public static void saveFile(File directory, String filename, byte[] content) throws IOException {
         File file = new File(directory, filename);
         if (!file.createNewFile()) {
-            System.out.println(filename + " was downloaded but the file cannot be created. Please, check if " + directory.getAbsolutePath() + " still exists and the writing permissions");
+            if (!ApplicationParams.S_APPLICATION_SILENT)
+                System.err.printf("%s was downloaded but the file cannot be created. Please, check if %s still exists and the writing permissions%n", filename, directory.getAbsolutePath());
             return;
         }
 
@@ -32,7 +33,8 @@ public class IOUtils {
         stream.flush();
         stream.close();
 
-        System.out.println("Download of " + filename + " completed");
+        if (!ApplicationParams.S_APPLICATION_SILENT)
+            System.out.printf("Download of %s completed%n", filename);
     }
 
     public static byte[] getMods(File parent) throws IOException {
@@ -42,7 +44,8 @@ public class IOUtils {
 
         File[] files = parent.listFiles();
         if (files == null) {
-            System.out.println("Failed to retrieve file in " + parent.getAbsolutePath());
+            if (!ApplicationParams.S_APPLICATION_SILENT)
+                System.out.printf("Failed to retrieve file in %s%n", parent.getAbsolutePath());
             return null;
         }
 
@@ -56,7 +59,7 @@ public class IOUtils {
         String osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
 
         if (osName.contains("windows")) {
-            return "%appdata%/.minecraft/mods";
+            return System.getProperty("APPDATA") + "/.minecraft/mods";
         } else if (osName.contains("linux")) {
             return System.getProperty("user.home") + "/.minecraft/mods";
         }

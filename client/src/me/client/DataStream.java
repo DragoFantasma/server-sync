@@ -13,10 +13,13 @@ public class DataStream {
         byte[] bytes = in.readNBytes(bytesToRead);
         String modName = new String(bytes);
 
-        System.out.println("Downloading " + modName + "...");
+        if (!ApplicationParams.S_APPLICATION_SILENT)
+            System.out.printf("Downloading %s...", modName);
 
         int contentLength = decodeLengthBytes(in.readNBytes(4));
-        System.out.println("Content length: " + contentLength + " bytes");
+
+        if (!ApplicationParams.S_APPLICATION_SILENT)
+            System.out.printf("Content length: %d bytes", contentLength);
 
         byte[] content = in.readNBytes(contentLength);
 
